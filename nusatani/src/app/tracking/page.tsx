@@ -6,7 +6,7 @@ import Navbar from '@/components/layout/Navbar';
 import Footer from '@/components/layout/Footer';
 import CartDrawer from '@/components/layout/CartDrawer';
 import StatusBadge from '@/components/ui/StatusBadge';
-import { dummyOrders } from '@/lib/data';
+import { useOrderStore } from '@/store';
 import { formatRupiah } from '@/lib/utils';
 import { cn } from '@/lib/utils';
 import { OrderStatus } from '@/types';
@@ -25,8 +25,9 @@ function getStepIndex(status: OrderStatus): number {
 }
 
 export default function TrackingPage() {
+  const { orders } = useOrderStore();
   const [searchId, setSearchId] = useState('');
-  const [selectedOrder, setSelectedOrder] = useState(dummyOrders[0]);
+  const [selectedOrder, setSelectedOrder] = useState(orders[0] || null);
 
   return (
     <div className="min-h-screen flex flex-col bg-cream">
@@ -56,7 +57,7 @@ export default function TrackingPage() {
           {/* Order List */}
           <div className="lg:col-span-1 space-y-3">
             <h3 className="font-semibold text-charcoal mb-2">Pesanan Anda</h3>
-            {dummyOrders.map((order) => (
+            {orders.map((order) => (
               <button
                 key={order.id}
                 onClick={() => setSelectedOrder(order)}

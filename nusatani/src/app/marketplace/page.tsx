@@ -7,7 +7,8 @@ import Footer from '@/components/layout/Footer';
 import CartDrawer from '@/components/layout/CartDrawer';
 import ProductCard from '@/components/features/ProductCard';
 import PriceTicker from '@/components/features/PriceTicker';
-import { dummyProducts, dummyPriceReferences, categories } from '@/lib/data';
+import { useProductStore } from '@/store';
+import { dummyPriceReferences, categories } from '@/lib/data';
 import { cn } from '@/lib/utils';
 
 export default function MarketplacePage() {
@@ -15,8 +16,9 @@ export default function MarketplacePage() {
   const [selectedCategory, setSelectedCategory] = useState('Semua');
   const [sortBy, setSortBy] = useState('terbaru');
   const [showFilters, setShowFilters] = useState(false);
+  const { products } = useProductStore();
 
-  const filtered = dummyProducts.filter((p) => {
+  const filtered = products.filter((p) => {
     const matchSearch = p.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
       p.farmerName.toLowerCase().includes(searchQuery.toLowerCase());
     const matchCategory = selectedCategory === 'Semua' || p.category === selectedCategory;

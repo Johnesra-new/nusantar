@@ -6,7 +6,8 @@ import Link from 'next/link';
 import Navbar from '@/components/layout/Navbar';
 import Footer from '@/components/layout/Footer';
 import CartDrawer from '@/components/layout/CartDrawer';
-import { useCartStore } from '@/store';
+import { useCartStore, useOrderStore, useProductStore, useAuthStore, useNotificationStore } from '@/store';
+import { Order } from '@/types';
 import { formatRupiah } from '@/lib/utils';
 import { cn } from '@/lib/utils';
 
@@ -32,15 +33,53 @@ const paymentMethods = [
 
 export default function CheckoutPage() {
   const { items, totalPrice, clearCart } = useCartStore();
+  const { addOrder } = useOrderStore();
+  const { reduceStock } = useProductStore();
+  const { userId } = useAuthStore();
+  const { addNotification } = useNotificationStore();
   const [step, setStep] = useState(1);
   const [selectedShipping, setSelectedShipping] = useState('local');
   const [selectedPayment, setSelectedPayment] = useState('qris');
   const [orderPlaced, setOrderPlaced] = useState(false);
+  const [orderId, setOrderId] = useState('');
 
   const shipping = shippingOptions.find((s) => s.id === selectedShipping)!;
   const grandTotal = totalPrice() + shipping.price;
 
   const handlePlaceOrder = () => {
+    const newOrderId = `ORD-${new Date().getFullYear()}-${String(Date.now()).slice(-4)}`;
+    const newOrder: Order = {
+      id: newOrderId,
+      buyerId: userId || 'b1',
+      items: items.map((item, i) => ({
+        id: `oi_${Date.now()}_${i}`,
+        productId: item.product.id,
+        productName: item.product.name,
+        farmerId: item.product.farmerId,
+        farmerName: item.product.farmerName,
+        quantity: item.quantity,
+        unitPrice: item.product.price,
+      })),
+      status: 'pending',
+      totalPrice: totalPrice(),
+      shippingCost: shipping.price,
+      paymentStatus: 'paid',
+      createdAt: new Date().toISOString(),
+    };
+    addOrder(newOrder);
+    // Reduce stock for each item
+    items.forEach((item) => reduceStock(item.product.id, item.quantity));
+    // Add notification for farmers
+    const farmerNames = [...new Set(items.map(i => i.product.farmerName))];
+    addNotification({
+      id: `n_${Date.now()}`,
+      message: `Order baru ${newOrderId} masuk — ${items.map(i => i.product.name).join(', ')}`,
+      type: 'order',
+      read: false,
+      createdAt: new Date().toISOString(),
+      targetRole: 'farmer',
+    });
+    setOrderId(newOrderId);
     setOrderPlaced(true);
     clearCart();
   };
@@ -56,7 +95,7 @@ export default function CheckoutPage() {
               <CheckCircle2 className="w-10 h-10 text-emerald-600" />
             </div>
             <h1 className="text-h2 text-charcoal mb-3">Pesanan Berhasil! 🎉</h1>
-            <p className="text-gray-500 mb-2">Nomor Order: <span className="font-mono font-bold text-forest">ORD-2026-004</span></p>
+            <p className="text-gray-500 mb-2">Nomor Order: <span className="font-mono font-bold text-forest">{orderId}</span></p>
             <p className="text-gray-400 text-sm mb-8">
               Pembayaran Anda sedang diproses. Petani akan segera menyiapkan pesanan Anda.
             </p>

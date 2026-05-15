@@ -1,5 +1,6 @@
 import type { Metadata } from 'next';
 import './globals.css';
+import StoreHydration from '@/components/layout/StoreHydration';
 
 export const metadata: Metadata = {
   title: 'NusaTani — Dari Ladang ke Meja Makan',
@@ -15,7 +16,10 @@ export default function RootLayout({
 }) {
   return (
     <html lang="id">
-      <body>{children}</body>
+      <body>
+        <StoreHydration />
+        {children}
+      </body>
     </html>
   );
 }

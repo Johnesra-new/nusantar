@@ -8,10 +8,13 @@ import CartDrawer from '@/components/layout/CartDrawer';
 import ProductCard from '@/components/features/ProductCard';
 import PriceTicker from '@/components/features/PriceTicker';
 import StatsCard from '@/components/features/StatsCard';
-import { dummyProducts, dummyPriceReferences, categories, dummyDashboardStats } from '@/lib/data';
+import { useProductStore } from '@/store';
+import { dummyPriceReferences, categories, dummyDashboardStats } from '@/lib/data';
 import { formatRupiah } from '@/lib/utils';
 
+
 export default function HomePage() {
+  const { products } = useProductStore();
   return (
     <div className="min-h-screen flex flex-col">
       <Navbar />
@@ -167,7 +170,7 @@ export default function HomePage() {
             </Link>
           </div>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-            {dummyProducts.slice(0, 4).map((product, i) => (
+            {products.slice(0, 4).map((product, i) => (
               <ProductCard key={product.id} product={product} index={i} />
             ))}
           </div>
@@ -230,7 +233,7 @@ export default function HomePage() {
             </div>
           </div>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-            {dummyProducts.slice(4, 8).map((product, i) => (
+            {products.slice(4, 8).map((product, i) => (
               <ProductCard key={product.id} product={product} index={i} />
             ))}
           </div>
