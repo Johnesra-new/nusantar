@@ -1,0 +1,114 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@import url('https://fonts.googleapis.com/css2?family=DM+Mono:ital,wght@0,300;0,400;0,500;1,300;1,400;1,500&family=Plus+Jakarta+Sans:ital,wght@0,200..800;1,200..800&display=swap');
+
+@layer base {
+  * {
+    @apply box-border;
+  }
+
+  body {
+    @apply bg-cream text-charcoal font-sans antialiased;
+  }
+
+  h1 {
+    @apply text-h1;
+  }
+  h2 {
+    @apply text-h2;
+  }
+  h3 {
+    @apply text-h3;
+  }
+}
+
+@layer components {
+  /* Status Badge */
+  .badge {
+    @apply inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-semibold;
+  }
+  .badge-verified {
+    @apply badge bg-forest/90 text-cream;
+  }
+  .badge-delivered {
+    @apply badge bg-emerald-100 text-emerald-700;
+  }
+  .badge-in-transit {
+    @apply badge bg-amber/10 text-amber;
+  }
+  .badge-pending {
+    @apply badge bg-gray-100 text-gray-500;
+  }
+  .badge-error {
+    @apply badge bg-terracotta/10 text-terracotta;
+  }
+
+  /* Card base */
+  .card {
+    @apply bg-white rounded-xl border border-sage shadow-sm hover:shadow-md transition-shadow duration-300;
+  }
+
+  /* Button variants */
+  .btn-primary {
+    @apply bg-forest hover:bg-forest-light text-cream font-semibold px-6 py-2.5 rounded-lg transition-all duration-200 shadow-sm hover:shadow-md active:scale-[0.98];
+  }
+  .btn-secondary {
+    @apply bg-amber hover:bg-amber-dark text-white font-semibold px-6 py-2.5 rounded-lg transition-all duration-200 shadow-sm hover:shadow-md active:scale-[0.98];
+  }
+  .btn-outline {
+    @apply border-2 border-forest text-forest hover:bg-forest hover:text-cream font-semibold px-6 py-2.5 rounded-lg transition-all duration-200 active:scale-[0.98];
+  }
+  .btn-ghost {
+    @apply text-charcoal hover:bg-sage px-4 py-2 rounded-lg transition-all duration-200;
+  }
+
+  /* Input */
+  .input {
+    @apply w-full px-4 py-2.5 rounded-lg border border-sage focus:border-forest focus:ring-2 focus:ring-forest/20 outline-none transition-all duration-200 bg-white text-charcoal placeholder:text-gray-400;
+  }
+
+  /* Dashboard stat card */
+  .stat-card {
+    @apply card p-6 relative overflow-hidden;
+  }
+  .stat-card::after {
+    content: '';
+    @apply absolute bottom-0 left-0 right-0 h-1;
+  }
+
+  /* Scrollbar styling */
+  ::-webkit-scrollbar {
+    @apply w-2;
+  }
+  ::-webkit-scrollbar-track {
+    @apply bg-cream;
+  }
+  ::-webkit-scrollbar-thumb {
+    @apply bg-sage-dark rounded-full hover:bg-forest/30;
+  }
+}
+
+@layer utilities {
+  .text-gradient {
+    @apply bg-gradient-to-r from-forest to-amber bg-clip-text text-transparent;
+  }
+
+  .glass {
+    @apply bg-white/70 backdrop-blur-md border border-white/20;
+  }
+
+  .animate-delay-100 {
+    animation-delay: 100ms;
+  }
+  .animate-delay-200 {
+    animation-delay: 200ms;
+  }
+  .animate-delay-300 {
+    animation-delay: 300ms;
+  }
+  .animate-delay-400 {
+    animation-delay: 400ms;
+  }
+}
